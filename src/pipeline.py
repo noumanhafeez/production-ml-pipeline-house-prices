@@ -8,13 +8,10 @@ from .utils.logger import get_logger
 logger = get_logger("pipeline", "logs/pipeline.log")
 
 
-def create_pipeline(df) -> Pipeline:
+def create_pipeline() -> Pipeline:
     """
     Create and return a sklearn pipeline with preprocessing and Linear Regression.
     Logs the pipeline creation steps.
-
-    Args:
-        df (pd.DataFrame): Sample dataframe to fit ColumnTransformer
     Returns:
         sklearn.pipeline.Pipeline
     """
@@ -22,7 +19,7 @@ def create_pipeline(df) -> Pipeline:
         logger.info("Starting pipeline creation.")
 
         # Create preprocessor
-        preprocessor = preprocess(df)
+        preprocessor = preprocess()
         logger.info("Preprocessor created successfully.")
 
         # Create the full pipeline

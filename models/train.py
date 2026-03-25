@@ -6,12 +6,14 @@ from src.data_splitter import split_data
 from src.pipeline import create_pipeline
 from src.utils.logger import get_logger
 from src.report import plot_predictions, save_metrics
+from sklearn.metrics import r2_score, mean_absolute_error, mean_squared_error
+import numpy as np
 
 # Create a logger for this module
 logger = get_logger("train", "logs/train.log")
 
 
-def train(path: str, target_col: str):
+def train(path: str, target_col: str) :
     """
     Train the pipeline on the given dataset, save the trained model,
     generate visualization reports, and save metrics.
@@ -31,7 +33,7 @@ def train(path: str, target_col: str):
                     f"y_train: {y_train.shape}, y_test: {y_test.shape}")
 
         # Create pipeline
-        pipeline = create_pipeline(df)
+        pipeline = create_pipeline()
         logger.info("Pipeline created successfully.")
 
         # Fit pipeline
@@ -39,12 +41,21 @@ def train(path: str, target_col: str):
         logger.info("Pipeline training completed.")
 
         # Evaluate
-        score = pipeline.score(X_test, y_test)
-        logger.info(f"Model R^2 score on test data: {score:.4f}")
+        y_pred = pipeline.predict(X_test)
+        r2 = r2_score(y_test, y_pred)
+        mae = mean_absolute_error(y_test, y_pred)
+        rmse = np.sqrt(mean_squared_error(y_test, y_pred))
+        logger.info(f"R2 Score: {r2:.4f}")
+        logger.info(f"MAE: {mae:.4f}")
+        logger.info(f"RMSE: {rmse:.4f}")
 
         # Generate visualization and metrics
-        plot_predictions(y_test, pipeline.predict(X_test))  # Save Predicted vs Actual plot
-        save_metrics(score)  # Save metrics as CSV
+        plot_predictions(y_test, y_pred)  # Save Predicted vs Actual plot
+        save_metrics({
+            "r2": r2,
+            "mae": mae,
+            "rmse": rmse
+        })
 
         # Save trained pipeline
         artifacts_dir = Path("artifacts")

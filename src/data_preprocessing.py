@@ -5,7 +5,7 @@ from .utils.logger import get_logger
 
 logger = get_logger("preprocess", "logs/preprocess.log")
 
-def preprocess(df: pd.DataFrame) -> ColumnTransformer:
+def preprocess() -> ColumnTransformer:
     """
     Preprocess the dataset using ColumnTransformer.
 
