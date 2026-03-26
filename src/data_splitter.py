@@ -5,7 +5,7 @@ from .utils.logger import get_logger
 logger = get_logger("data_splitter", "logs/data_splitter.log")
 
 
-def split_data(df: pd.DataFrame, target_col: str, test_size: float = 0.2, random_state: int = 42):
+def split_data(df: pd.DataFrame, target_col: str, test_size: float, random_state: int):
     """
     Splits a DataFrame into training and testing sets.
     Logs the process.
