@@ -12,7 +12,8 @@ def preprocess() -> ColumnTransformer:
     - Binary features (yes/no) -> 0/1
     - Multi-category features -> one-hot encoding
     - Numeric features -> passed through
-    Returns a ColumnTransformer which will be object type and ready to fit or transform.
+    Returns a ColumnTransformer and ready to fit or transform.
+
     """
     try:
         # Define columns
