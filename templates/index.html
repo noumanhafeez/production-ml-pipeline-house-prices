@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>House Price Prediction</title>
+
+    <!-- Responsive Meta -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 15px;
+        }
+
+        .container {
+            background: white;
+            padding: 25px;
+            border-radius: 20px;
+            width: 100%;
+            max-width: 420px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            animation: fadeIn 0.6s ease-in-out;
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #333;
+            font-size: 22px;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 10px;
+            margin: 6px 0;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+            font-size: 14px;
+            transition: 0.3s;
+        }
+
+        input:focus, select:focus {
+            border-color: #667eea;
+            outline: none;
+            box-shadow: 0 0 5px rgba(102,126,234,0.5);
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            margin-top: 12px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border: none;
+            color: white;
+            font-size: 15px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        button:hover {
+            transform: scale(1.03);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .result {
+            margin-top: 18px;
+            text-align: center;
+            font-size: 16px;
+            color: #333;
+            font-weight: 600;
+        }
+
+        /* 🔥 Mobile adjustments */
+        @media (max-width: 480px) {
+            .container {
+                padding: 20px;
+                border-radius: 15px;
+            }
+
+            h2 {
+                font-size: 18px;
+            }
+
+            input, select {
+                font-size: 13px;
+                padding: 9px;
+            }
+
+            button {
+                font-size: 14px;
+                padding: 10px;
+            }
+        }
+
+        /* 💻 Large screen enhancement */
+        @media (min-width: 768px) {
+            .container {
+                max-width: 500px;
+                padding: 30px;
+            }
+
+            h2 {
+                font-size: 24px;
+            }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <h2>🏠 House Price Predictor</h2>
+
+    <form action="/predict" method="POST">
+
+        <input type="number" name="area" placeholder="Area (sq ft)" required>
+        <input type="number" name="bedrooms" placeholder="Bedrooms" required>
+        <input type="number" name="bathrooms" placeholder="Bathrooms" required>
+        <input type="number" name="stories" placeholder="Stories" required>
+
+        <select name="mainroad">
+            <option value="">Main Road?</option>
+            <option value="yes">Yes</option>
+            <option value="no">No</option>
+        </select>
+
+        <select name="guestroom">
+            <option value="">Guest Room?</option>
+            <option value="yes">Yes</option>
+            <option value="no">No</option>
+        </select>
+
+        <select name="basement">
+            <option value="">Basement?</option>
+            <option value="yes">Yes</option>
+            <option value="no">No</option>
+        </select>
+
+        <select name="hotwaterheating">
+            <option value="">Hot Water Heating?</option>
+            <option value="yes">Yes</option>
+            <option value="no">No</option>
+        </select>
+
+        <select name="airconditioning">
+            <option value="">Air Conditioning?</option>
+            <option value="yes">Yes</option>
+            <option value="no">No</option>
+        </select>
+
+        <input type="number" name="parking" placeholder="Parking Spaces" required>
+
+        <select name="prefarea">
+            <option value="">Preferred Area?</option>
+            <option value="yes">Yes</option>
+            <option value="no">No</option>
+        </select>
+
+        <select name="furnishingstatus">
+            <option value="">Furnishing Status</option>
+            <option value="furnished">Furnished</option>
+            <option value="semi-furnished">Semi-Furnished</option>
+            <option value="unfurnished">Unfurnished</option>
+        </select>
+
+        <button type="submit">Predict Price 🚀</button>
+    </form>
+
+    {% if prediction %}
+        <div class="result">
+            💰 Predicted Price: {{ prediction }}
+        </div>
+    {% endif %}
+
+</div>
+
+</body>
+</html>
