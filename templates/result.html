@@ -2,20 +2,11 @@
 <html>
 <head>
     <title>Prediction Result</title>
-
-    <!-- Responsive Meta -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <!-- Google Font -->
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
 
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Poppins', sans-serif;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
 
         body {
             background: linear-gradient(135deg, #667eea, #764ba2);
@@ -26,88 +17,93 @@
             padding: 15px;
         }
 
+        /* Prediction Card */
         .card {
-            background: white;
+            background: #ffffff;
             padding: 30px;
             border-radius: 20px;
             text-align: center;
             width: 100%;
             max-width: 420px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
             animation: fadeIn 0.6s ease-in-out;
+            position: relative;
         }
 
-        h2 {
-            margin-bottom: 15px;
-            color: #333;
-            font-size: 22px;
-        }
-
-        .price {
-            font-size: 26px;
-            font-weight: bold;
-            color: #667eea;
-            margin: 20px 0;
-            word-wrap: break-word;
-        }
+        h2 { margin-bottom: 15px; color: #333; font-size: 22px; }
+        .price { font-size: 26px; font-weight: bold; color: #4a90e2; margin: 20px 0; word-wrap: break-word; }
 
         a {
             text-decoration: none;
             display: inline-block;
             margin-top: 15px;
             padding: 10px 20px;
-            background: linear-gradient(135deg, #667eea, #764ba2);
+            background: #4a90e2;
             color: white;
             border-radius: 10px;
             transition: 0.3s;
             font-size: 14px;
         }
 
-        a:hover {
-            transform: scale(1.05);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        a:hover { transform: scale(1.05); box-shadow: 0 5px 15px rgba(0,0,0,0.2); }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* Light Friendly Popup */
+        .popup {
+            position: fixed;
+            top: 30px;
+            right: 30px;
+            width: 320px;
+            background: #ffffff;
+            color: #333;
+            border-left: 6px solid #4a90e2;
+            border-radius: 15px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+            font-family: 'Poppins', sans-serif;
+            animation: popupSlideIn 0.6s ease forwards;
+            z-index: 9999;
         }
 
-        /* 📱 Mobile */
+        .popup-content { padding: 20px 25px; text-align: center; position: relative; }
+
+        .popup-content h3 {
+            margin: 10px 0;
+            font-size: 18px;
+            color: #4a90e2;
+        }
+
+        .popup-content p { font-size: 14px; line-height: 1.4; }
+
+        .icon {
+            font-size: 32px;
+            margin-bottom: 10px;
+            animation: bounce 1s infinite alternate;
+        }
+
+        .close {
+            position: absolute;
+            top: 8px;
+            right: 12px;
+            font-size: 20px;
+            cursor: pointer;
+            color: #aaa;
+            transition: 0.3s;
+        }
+
+        .close:hover { color: #4a90e2; }
+
+        @keyframes popupSlideIn { from { opacity: 0; transform: translateY(-40px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes slideOut { from { opacity: 1; transform: translateY(0); } to { opacity: 0; transform: translateY(-40px); } }
+        @keyframes bounce { 0% { transform: translateY(0); } 100% { transform: translateY(-8px); } }
+
+        /* Mobile adjustments */
         @media (max-width: 480px) {
-            .card {
-                padding: 20px;
-                border-radius: 15px;
-            }
-
-            h2 {
-                font-size: 18px;
-            }
-
-            .price {
-                font-size: 22px;
-            }
-
-            a {
-                font-size: 13px;
-                padding: 9px 16px;
-            }
-        }
-
-        /* 💻 Larger screens */
-        @media (min-width: 768px) {
-            .card {
-                max-width: 500px;
-                padding: 40px;
-            }
-
-            h2 {
-                font-size: 24px;
-            }
-
-            .price {
-                font-size: 30px;
-            }
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
+            .card { padding: 20px; border-radius: 15px; }
+            h2 { font-size: 18px; }
+            .price { font-size: 22px; }
+            a { font-size: 13px; padding: 9px 16px; }
+            .popup { width: 90%; top: 20px; right: 5%; }
         }
     </style>
 </head>
@@ -116,13 +112,36 @@
 
 <div class="card">
     <h2>🏠 Prediction Result</h2>
-
-    <div class="price">
-        💰 {{ prediction }}
-    </div>
-
+    <div class="price">💰 {{ prediction }}</div>
     <a href="/">🔙 Predict Again</a>
 </div>
+
+<!-- Light Friendly Popup -->
+<div id="warningPopup" class="popup">
+    <div class="popup-content">
+        <span class="close" onclick="closePopup()">&times;</span>
+        <div class="icon">💡</div>
+        <h3>Heads Up!</h3>
+        <p>The predicted values <strong>might not be exact</strong>. Use them as a reference only!</p>
+    </div>
+</div>
+
+<script>
+function closePopup() {
+    const popup = document.getElementById('warningPopup');
+    popup.style.animation = 'slideOut 0.5s forwards';
+    setTimeout(() => popup.remove(), 500);
+}
+
+// Auto-hide after 5 seconds
+setTimeout(() => {
+    const popup = document.getElementById('warningPopup');
+    if(popup){
+        popup.style.animation = 'slideOut 0.5s forwards';
+        setTimeout(() => popup.remove(), 500);
+    }
+}, 5000);
+</script>
 
 </body>
 </html>
