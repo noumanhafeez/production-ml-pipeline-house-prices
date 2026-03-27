@@ -5,7 +5,7 @@ data:
   random_state: 42
 
 model:
-  name: random_forest
+  name: linear
 
   params:
     linear: {}
@@ -19,7 +19,7 @@ model:
       max_depth: 40
 
 artifacts:
-  model_path: artifacts/house_price_random_tree.pkl
+  model_path: artifacts/house_price_linear.pkl
 
 mlflow:
   experiment_name: house_price_linear_random_tree
