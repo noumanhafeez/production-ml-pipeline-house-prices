@@ -1,167 +1,278 @@
-# 🏠 House Price Prediction
+# 🏠 Production ML Pipeline - House Price Prediction
 
-A production-style machine learning pipeline for predicting house prices using Linear Regression. Built with scikit-learn, this project follows clean architecture principles with modular components, structured logging, and artifact management.
+A **production-ready end-to-end Machine Learning pipeline** for predicting house prices, built with modern **MLOps practices** including CI, MLflow tracking, Docker, and a Flask-based web interface.
 
 ---
 
-## 📁 Project Structure
+## 🚀 Features
+
+* 🔄 End-to-End ML Pipeline (Data → Training → Evaluation → Deployment)
+* ⚙️ Config-driven architecture using YAML
+* 📊 MLflow experiment tracking & model logging
+* 📈 Automated metrics & visualization generation
+* 🐳 Dockerized application (production-ready)
+* 🔁 CI pipeline using GitHub Actions
+* 🌐 Interactive Web UI for predictions
+* 🧾 Structured logging system
+
+---
+
+## 🚀 Quick Start
+
+```bash
+# Clone & install
+git clone https://github.com/noumanhafeez/production-ml-pipeline-house-prediction.git
+cd production-ml-pipeline-house-prediction
+
+pip install -r requirements.txt
+
+# Train model
+python main.py
+
+# Launch web app  
+python app.py
+```
+---
+
+## 🌐 Web UI Preview
+A simple and interactive UI where users can input house features and get price predictions instantly.
+
+## 🎥 Demo
+
+![Demo](assets/house_demo.gif)
+
+## 🌐 Live Demo
+> 🚧 Live demo coming soon (deployment in progress)
+---
+
+## 📂 Project Structure
 
 ```
-house-price-prediction/
+production-ml-pipeline-house-prediction/
 │
-├── data/
-│   └── housing.csv                  # Input dataset
-│
-├── src/
-│   ├── data_loader.py               # CSV ingestion
-│   ├── data_splitter.py             # Train/test split
-│   ├── data_preprocessing.py        # Feature encoding & transformation
-│   ├── pipeline.py                  # sklearn Pipeline builder
-│   ├── report.py                    # Metrics & plot generation
-│   └── utils/
-│       └── logger.py                # Centralized logging utility
-│
-├── models/
-│   └── train.py                     # Training orchestration
-│
-├── artifacts/
-│   ├── house_price_pipeline.pkl     # Saved trained model
-│   ├── metrics.csv                  # Evaluation metrics
-│   └── prediction_vs_actual.png     # Visualization plot
-│
-├── logs/                            # Per-module log files
-├── main.py                          # Entry point
+├── .github/workflows/        # CI pipeline
+├── artifacts/                # Saved models & outputs
+├── assets/                   # assets (media files)
+├── data/                     # Dataset
+├── logs/                     # Log files
+├── mlruns/                   # MLflow experiments
+├── models/                   # Training logic
+│   └── train.py
+├── notebook/                 # EDA notebooks
+├── src/                      # Core source code
+│   ├── config.py
+│   ├── data_loader.py
+│   ├── data_splitter.py
+│   ├── data_preprocessing.py
+│   ├── pipeline.py
+│   ├── report.py
+│   ├── get_prediction.py
+│   └── utils/logger.py
+├── templates/                # HTML templates
+├── app.py                    # Flask web app
+├── main.py                   # Training entry point
+├── config.yaml               # Configuration file
+├── Dockerfile                # Container configuration
+├── requirements.txt
 └── README.md
 ```
 
 ---
 
-## ⚙️ How It Works
+## ⚙️ Configuration
 
-The pipeline follows a clean, sequential flow:
+All parameters are controlled via `config.yaml`.
 
+### Example:
+
+```yaml
+data:
+  path: data/housing.csv
+  target_column: price
+  test_size: 0.2
+  random_state: 42
+
+model:
+  name: random_forest
+
+  params:
+    random_forest:
+      n_estimators: 100
+      max_depth: 40
 ```
-CSV Data → Load → Split → Preprocess → Train → Evaluate → Save Artifacts
-```
 
-### Feature Engineering
-
-| Feature Type | Columns | Encoding |
-|---|---|---|
-| Binary (yes/no) | `mainroad`, `guestroom`, `basement`, `hotwaterheating`, `airconditioning`, `prefarea` | Ordinal (0/1) |
-| Multi-category | `furnishingstatus` | One-Hot (drop first) |
-| Numeric | All remaining | Passthrough |
+- ✔ Easily switch models
+- ✔ Adjust hyperparameters
+- ✔ Maintain reproducibility
 
 ---
 
-## 🚀 Getting Started
+## 📋 Dataset
 
-### Prerequisites
+**Housing Prices Dataset**
+- **Source**: [Kaggle - Housing Prices Dataset](https://www.kaggle.com/datasets/yasserh/housing-prices-dataset)
+- **Size**: 545 houses
+- **Features**: 12 (area, bedrooms, bathrooms, stories, mainroad, guestroom, basement, hotwaterheating, airconditioning, parking, prefarea, furnishingstatus)
+- **Target**: `price` (house price in currency units)
+- **Location**: `data/housing.csv` (included in repo)
 
-- Python 3.8+
-- pip
+**Key Stats**:
+- **Numerical**: 6 features (price, area, bedrooms, bathrooms, stories, parking)
+- **Categorical**: 7 features (mainroad, guestroom, basement, hotwaterheating, airconditioning, prefarea, furnishingstatus)
+> **Note**: This is a small dataset for demo purposes. The pipeline is **fully scalable** for production datasets (millions of rows) with the same config-driven MLOps architecture.
+---
 
-### Installation
+## 🧠 ML Pipeline Workflow
+
+1. Load dataset
+2. Split data into train/test
+3. Create preprocessing + model pipeline
+4. Train model
+5. Generate predictions
+6. Evaluate performance (R², MAE, RMSE)
+7. Log everything with MLflow
+8. Save trained model
+
+---
+
+## 📊 MLflow Tracking
+
+Run MLflow UI locally:
 
 ```bash
-git clone https://github.com/your-username/house-price-prediction.git
-cd house-price-prediction
-pip install -r requirements.txt
+mlflow ui
 ```
 
-### Run Training
+Then open:
+
+```
+http://localhost:5000
+```
+
+### Tracks:
+
+* Parameters
+* Metrics
+* Models
+* Artifacts (plots, files)
+
+---
+
+## ▶️ Run Training Pipeline
 
 ```bash
 python main.py
 ```
 
-Configure the dataset path and target column directly in `main.py`:
+---
 
-```python
-data_path = "data/housing.csv"
-target_column = "price"
+## 🌐 Run Web Application
+
+```bash
+python app.py
+```
+
+Open in browser:
+
+```
+http://localhost:5000
 ```
 
 ---
 
-## 📊 Outputs
+## 🐳 Run with Docker
 
-After training, the following artifacts are saved to the `artifacts/` directory:
+### Build Docker Image
 
-| Artifact | Description |
-|---|---|
-| `house_price_pipeline.pkl` | Serialized trained sklearn pipeline |
-| `metrics.csv` | R², MAE, and RMSE scores |
-| `prediction_vs_actual.png` | Scatter plot of predicted vs actual prices |
-
----
-
-## 📈 Evaluation Metrics
-
-The model is evaluated on a held-out test set (20% of data) using:
-
-- **R² Score** — Proportion of variance explained
-- **MAE** — Mean Absolute Error
-- **RMSE** — Root Mean Squared Error
-
----
-
-## 🧩 Module Overview
-
-| Module | Responsibility |
-|---|---|
-| `data_loader.py` | Reads CSV with error handling and logging |
-| `data_splitter.py` | Stratified 80/20 train-test split |
-| `data_preprocessing.py` | Builds a `ColumnTransformer` for encoding |
-| `pipeline.py` | Composes preprocessor + `LinearRegression` into a `Pipeline` |
-| `train.py` | Orchestrates end-to-end training, evaluation, and artifact saving |
-| `report.py` | Saves metrics to CSV and generates prediction plots |
-| `logger.py` | Configures per-module file loggers |
-
----
-
-## 📋 Requirements
-
-```
-pandas
-scikit-learn
-matplotlib
-joblib
-numpy
+```bash
+docker build -t house-price-app .
 ```
 
-> Add these to a `requirements.txt` file at the project root.
+### Run Container
 
----
-
-## 🪵 Logging
-
-Each module writes to its own log file under `logs/`:
-
-```
-logs/
-├── main.log
-├── train.log
-├── data_loader.log
-├── data_splitter.log
-├── preprocess.log
-├── pipeline.log
-└── report.log
+```bash
+docker run -p 5000:5000 house-price-app
 ```
 
 ---
 
-## 🔭 Future Improvements
+## 🔁 Continuous Integration (CI)
 
-- [ ] Add hyperparameter tuning with `GridSearchCV`
-- [ ] Experiment with ensemble models (Random Forest, XGBoost)
-- [ ] Add cross-validation support
-- [ ] Expose training via CLI with `argparse`
-- [ ] Add unit tests with `pytest`
-- [ ] Containerize with Docker
+GitHub Actions automatically:
+- Installs dependencies
+- Runs training pipeline
+- Validates pipeline execution
+- Prevents broken commits from merging
+Workflow file:
+
+```
+.github/workflows/ci.yaml
+```
 
 ---
 
-## 📄 License
+## 📈 Outputs
 
-This project is licensed under the MIT License.
+After training, the following are generated:
+
+* 📦 Model files → `artifacts/*.pkl`
+* 📊 Metrics → `metrics.csv`
+* 📉 Visualization → `prediction.png`
+
+---
+
+## 💡 Why This Project?
+
+This project demonstrates how to take a machine learning model from experimentation to a production-ready system using MLOps best practices.
+
+--- 
+
+## ⚠️ Future Improvements
+
+* 🚀 Add CD pipeline (auto deployment)
+* 🔐 Add input validation & error handling
+* 🌍 Deploy on cloud (Render / AWS / HuggingFace)
+* 🧪 Add unit & integration tests
+* 🎨 Improve UI/UX design
+* 🔄 Model versioning strategy (staging/production)
+* 📊 Add monitoring (data drift, model drift)
+* ⚡ Convert Flask → FastAPI for production APIs
+
+---
+
+## 🛠️ Tech Stack
+
+- **Language**: Python
+- **ML**: Scikit-learn
+- **MLOps**: MLflow, Docker, GitHub Actions
+- **Backend**: Flask
+- **Frontend**: HTML, CSS
+- **Others**: YAML, Logging
+
+---
+
+## 📜 License
+
+MIT License © 2026 Nouman Hafeez
+
+---
+
+## 👨‍💻 Author
+
+**Nouman Hafeez**
+Machine Learning Engineer | MLOps Enthusiast
+
+📫 Connect: https://www.linkedin.com/in/nouman-hafeez/
+
+---
+
+![Python](https://img.shields.io/badge/Python-3.10-blue)
+![MLflow](https://img.shields.io/badge/MLflow-Tracking-blue)
+![Docker](https://img.shields.io/badge/Docker-Containerized-blue)
+![CI](https://img.shields.io/badge/GitHub_Actions-CI-green)
+
+---
+
+## ⭐ Support
+
+If you like this project, consider giving it a ⭐ on GitHub!
